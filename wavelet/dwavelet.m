@@ -24,35 +24,37 @@ Xsyn = idwt2(cA1,cH1,cV1,cD1,'db1');
 [C,S] = wavedec2(X,2,'db1');
 
 %% 
-[WLL,WLH,WHL,WHH] = ddwaveletdec(X,'haar');
-
-showdecwave( WLL,WLH,WHL,WHH,map )
-
-figure
-WLL=(255/max(max(WLL)))*WLL;
-subplot(2,2,1);
-image(WLL); colormap(map);
-title('WLL')
-
-WLH=(255/max(max(WLH)))*WLH;
-subplot(2,2,2);
-image(WLH); colormap(map);
-title('WLH')
-
-WHL=(255/max(max(WHL)))*WHL;
-subplot(2,2,3);
-image(WHL); colormap(map);
-title('WHL')
-
-WHH=(255/max(max(WHH)))*WHH;
-subplot(2,2,4);
-image(WHH); colormap(map);
-title('WHH')
+% [WLL,WLH,WHL,WHH] = ddwaveletdec(X,'haar');
+% 
+% showdecwave( WLL,WLH,WHL,WHH,map )
+% 
+% figure
+% WLL=(255/max(max(WLL)))*WLL;
+% subplot(2,2,1);
+% image(WLL); colormap(map);
+% title('WLL')
+% 
+% WLH=(255/max(max(WLH)))*WLH;
+% subplot(2,2,2);
+% image(WLH); colormap(map);
+% title('WLH')
+% 
+% WHL=(255/max(max(WHL)))*WHL;
+% subplot(2,2,3);
+% image(WHL); colormap(map);
+% title('WHL')
+% 
+% WHH=(255/max(max(WHH)))*WHH;
+% subplot(2,2,4);
+% image(WHH); colormap(map);
+% title('WHH')
 %% 
 n=5
-imgs = multdecwave(X,'haar',n);
+niveisdec = multdecwave(X,'haar',n);
 
 for i=1:n
 showdecwave( niveisdec(i).WLL,niveisdec(i).WLH,niveisdec(i).WHL,niveisdec(i).WHH,map );
 end
 
+energy  = waveEnergy( niveisdec );
+energy2=energy/sum(sum(energy));
