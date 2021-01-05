@@ -1,0 +1,15 @@
+function [ output_args ] = waveEnergy( niveisdec )
+%Cálculo do nível de energia de decomposição de subbanda wavelet
+%   energy(nível,:)= [energyWLL ,energyWLH ,energyWHL ,energyWHH]
+
+energy=zeros(length(niveisdec),4);
+
+for i = 1:length(niveisdec)
+   
+    energy(i,1)=niveisdec(i).WLL
+    energy(i,2)=niveisdec(i).WLH
+    energy(i,3)=niveisdec(i).WHL
+    energy(i,4)=niveisdec(i).WHH
+end
+end
+
