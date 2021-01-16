@@ -1,55 +1,54 @@
 clear;clc; close all;
 
-A = double(imread('../Exames/6019.1.jpeg'));
+A = imread('../Exames/5961.1.jpeg');
+%A = imread('../Exames/Camada 3.png');
+
+if length(size(A))==3
+   A=double(rgb2gray(A));
+else
+    A=double(A);
+end
 
 %diretório das bases
 arquivos = dir('./2'); 
 
 % número de imgbase abertas por vez
-n=3; 
-figure(1)
-imshow(uint8(A))
+n=1; 
+figure
+image(A,'CDataMapping','scaled')
+colormap('gray')
 
- w =  [ 0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512;
-   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378;
-   -0.2268   -0.2268   -0.2268   -0.2268   -0.2268   -0.2268   -0.2268   -0.2268   -0.2268   -0.2268;
-   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378   -0.0378;
-    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512    0.1512];
-    
-    
-
-for i = 2:n
-    % abre imgbase 
+for i = 1:n
+%   abre imgbase 
     b1=double(rgb2gray(imread(strcat('2/',arquivos(i+2).name))));
-    b1=b1(1:8:end,1:8:end);
-    %normalização do filtro b
-    b=b1-127;%max(max(b1));
-    b=b/max(max(b));
-    b=b/norm(b);
-    figure;surf(b)
-    figure;surf(w)
-%     A=max(max(A))-A;
-%     A=A/norm(A);
-   
-    imres = convn(A,b,'same');
-    [y,x]=find(imres==min(min(imres)));
-    
-    
-%     figure
-%     imshow(uint8(b1))
-%     title(strcat('Imgbase ',int2str(i)))
-    %imres=imres-1500;
+    %b1=b1-127;%max(max(b1));
     figure
-%     surf(imres)
-%     hold on
-    image(imres-1000)
-    colormap('pink')
-%     
-%     figure(1)
-%     hold on
-%     plot(x,y,'o')
-%     text(x,(y+20),int2str(i),'Color','red','FontSize',20)
-%     drawnow 
+    image(b1,'CDataMapping','scaled')
+    title(char(arquivos(i+2).name));
+    
+    y=b1;
+    x=max(b1);
+    x2=repmat(x,size(b1,1),1);
+    y2=y./x2-1;
+    
+    
+    figure
+    image(y2,'CDataMapping','scaled')
+%   normalização do filtro b
+    %b=b/max(max(b));
+    %b=b/norm(b);  
+   
+    %imres = convn(A,b,'same');
+    %[y,x]=find(imres==min(min(imres)));
+    
+    
+
+%     limiar=19;
+%     imres(imres<limiar)=0;
+%     imres3=A;
+%     imres3(imres>limiar)=255;
+%     imres3=imres3*255/max(max(imres3));
+%     imshow(uint8(imres3))
 end
 
 
