@@ -1,7 +1,7 @@
 clear;clc; close all;
 
-%A = imread('../Recortes/5961.1.jpeg');
-A = imread('./1/Camada 22.png');
+A = imread('../Recortes/5961.1.jpeg');
+%A = imread('./1/Camada 22.png');
 if length(size(A))==3
    A=double(rgb2gray(A));
 else

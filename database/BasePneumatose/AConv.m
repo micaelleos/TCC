@@ -1,3 +1,6 @@
+%% AConv
+% Operação de correlação cruzada entre um pedacinho de achado RX com a
+% imagem de um exame.
 clear;clc; close all;
 
 A = imread('../Exames/5961.1.jpeg');
@@ -10,47 +13,48 @@ else
 end
 
 %diretório das bases
-arquivos = dir('./2'); 
+arquivos = dir('./1'); 
 
 % número de imgbase abertas por vez
-n=1; 
+n=7; 
 figure
 image(A,'CDataMapping','scaled')
 colormap('gray')
 
-for i = 1:n
+
+% filtro de Aprimoramento (enhancement filter)
+f=[-1 -1 -1;-1 9 -1; -1 -1 -1];
+
+for i = 7:n
 %   abre imgbase 
-    b1=double(rgb2gray(imread(strcat('2/',arquivos(i+2).name))));
-    %b1=b1-127;%max(max(b1));
+    b=double(rgb2gray(imread(strcat('1/',arquivos(i+2).name))));
     figure
-    image(b1,'CDataMapping','scaled')
-    title(char(arquivos(i+2).name));
+    image(b,'CDataMapping','scaled')
+    title('Kernel');
     
-    y=b1;
-    x=max(b1);
-    x2=repmat(x,size(b1,1),1);
-    y2=y./x2-1;
+%   Normalização dos vetore
+    b1=b;
+    b1=b1-sum(sum(b1))/(size(b,1)*size(b,2));
+    b1=b1/norm(b1);
+    b2=b1(:);
     
+    A1=A;
+    A1=A1-sum(sum(A1))/(size(A1,1)*size(A1,2));
+    A1=A1/norm(A1);
+    A2=A1(:);
     
-    figure
-    image(y2,'CDataMapping','scaled')
-%   normalização do filtro b
-    %b=b/max(max(b));
-    %b=b/norm(b);  
-   
-    %imres = convn(A,b,'same');
-    %[y,x]=find(imres==min(min(imres)));
-    
-    
+%   Operação de correlação cruzada
+    imres = xcorr2(b1,A1);
 
-%     limiar=19;
-%     imres(imres<limiar)=0;
-%     imres3=A;
-%     imres3(imres>limiar)=255;
-%     imres3=imres3*255/max(max(imres3));
-%     imshow(uint8(imres3))
+    %imres = crosscoor( A1,b1 );
+    imres1=conv2(imres,f);%abs(imres);
+    
+    
+    figure
+    image(imres1,'CDataMapping','scaled')
+    title(char(strcat('Resultado',arquivos(i+2).name)));
+        
 end
-
 
 
 
