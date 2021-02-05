@@ -1,17 +1,21 @@
 function [ J ] = filtrocasado( A, b )
 %UNTITLED2 Summary of this function goes here
 %   espera-se que b tenha dimensões ímpares
+%b=b0(2:end,2:end); % armengue por ter cortado os kernels na dimenção 40x40
 
 [dbx dby]=size(b);
 
 M=zeros(dbx,dby);
 J=zeros(size(A,1),size(A,2));
 
+%Normalização dos vetores
 b=b-mean(b(:));
 b=b./norm(b);
 
-A=A-mean(A(:));
-A=A./norm(A);
+% A=A-mean(A(:));
+% A=A./norm(A);
+
+
 
 % nesta convolução há redução da imagem de saída - sem padding
 for i = 1:size(A,1)-ceil(dbx/2)
@@ -22,7 +26,10 @@ for i = 1:size(A,1)-ceil(dbx/2)
         if (norm(M)~=0)
         M=M./norm(M);
         end
-        J(i,j) = sum(sum(M.*b));
+         J(i,j)=sum(sum(M(:)'*b(:)));
+         if J(i,j)>1 % análise de erro no código
+         i;
+         end
         end
     end
 end
