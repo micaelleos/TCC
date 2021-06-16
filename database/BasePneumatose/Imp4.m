@@ -26,8 +26,11 @@ end
 resultado=[];
 imres = []; 
 
+%limiar de correpondência
+limiar=0.8;
+
 %% Banco de Filtro 
-nomedir='1';
+nomedir='4';
 arquivos = dir(strcat('./',nomedir)); %diretório das bases
 quantIm = length(arquivos)-2;
 
@@ -41,20 +44,23 @@ b=double(imread(strcat(nomedir,'/',arquivos(l+2).name)))-127;
 imres = filtrocasado(A, b);
 resultado(l).im = imres;
 
-[x y] = find(imres == max(max(imres))); 
+[x y] = find(imres>max(max(imres))*limiar); 
 
-vmax=[vmax; x y];
+vmax(l).x=x;
+vmax(l).y=y;
+vmax(l).img = zeros(size(imres));
+vmax(l).img(imres>max(max(imres))*limiar) = 1;
+vmax(l).img = vmax(l).img.*imres;
+clear x y;
 
 waitbar(l/quantIm)
 end
 close(h)
-%% 
-
-%%Tentativas de fusões
+%% Tentativas de fusões
 resprod=[];
 ressoma=[];
 for j =1:quantIm
-    imres = resultado(j).im;
+    imres = vmax(j).img;
     
     if(j==1)
         resprod=imres;
@@ -79,33 +85,16 @@ subplot(1,2,1)
 colormap('gray')
 image(IMFsoma,'CDataMapping','scaled')
 title('Im Máximos');
-hold on
-plot(vmax(:,1),vmax(:,2),'dr')
-legend('Pontos máximos')
+% hold on
+% plot(vmax(:,2),vmax(:,1),'dr')
+% legend('Pontos máximos')
 
 subplot(1,2,2)
 colormap('gray')
-image(imderivativo,'CDataMapping','scaled')
+image(ressoma,'CDataMapping','scaled')
 title('Im Fusão Linear + Filtro Derivativo');
 
-figure
 
-image(A,'CDataMapping','scaled')
-colorbar
-title('IMFsoma');
-
-imwrite(uint8(imderivativo),'bordas.png')
-%% Exibição de resultado de processamento por região
-%comparando com as marcações de Márcia
-
-% MMR=imfuse(MM,achadosreg);
-%     
-% subplot(1,2,2)   
-% image(MMR,'CDataMapping','scaled')
-% colormap('gray')
-% title('Resultado');
-% hold on
-% plot(achados(:,2),achados(:,1),'dr')
 
 toc
 
