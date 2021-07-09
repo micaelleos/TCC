@@ -10,7 +10,7 @@ J=zeros(size(A,1)-ceil(dbx/2),size(A,2)-ceil(dby/2));
 b=b(:);
 b=b-mean(b);
 b=b./norm(b);
-
+tic
 % nesta convolução há redução da imagem de saída - sem padding
 for i = 1:size(A,1)-ceil(dbx/2)
     for j = 1:size(A,2)-ceil(dby/2)
@@ -25,5 +25,7 @@ for i = 1:size(A,1)-ceil(dbx/2)
         end
     end
 end
+toc
+
 end
 

@@ -3,13 +3,14 @@
 
 clear;clc;close all;
 %% Abertura das imagens
-tic
+%tic
 
-nomex='5961.1';
+nomex='5961.1'; 
 %Abertura das imagens
 dirI=strcat('../Exames/',nomex,'.jpg');    %exame
-dirM=strcat('./Mascaras/',nomex,'m.jpg');  %mascara
+dirM=strcat('./Mascaras/',nomex,'.jpg');  %mascara
 [A,AM] = abririm(dirI,dirM);
+%[A] = abririm(dirI);
 
 
 %% Rede de Filtros 
@@ -20,5 +21,6 @@ dirM=strcat('./Mascaras/',nomex,'m.jpg');  %mascara
 %% Extração de tensor para treinamento
 %[tresL2] = tcbancfiltpmax(A,resL1,nomex);
 
-%layer 2
-%[resL2] =ctensorpmax(resL1,2);
+parpool
+%layer 2 tira o strid desta função (adicionar na verdade)
+[resL2] =ctensorpmaxGpu(resL1,'tL2');

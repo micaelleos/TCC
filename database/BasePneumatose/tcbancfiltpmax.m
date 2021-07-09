@@ -3,6 +3,9 @@ function [tresL2] = tcbancfiltpmax(A,resL1,nomex)
 %   Detailed explanation goes here
 imres = []; 
 
+%dimansão dos tensores
+dtx=40;
+dty=40;
 
 %pasta fixa filtros
 nomedir=strcat('./Base_de_teste_2/',nomex,'/20x20');
@@ -12,7 +15,9 @@ quantIm = length(arquivos)-2;
 
 h = waitbar(0,'Extraindo tensores da saída da camada 1 ');
 
-tresL2=zeros(quantIm,size(resL1,1),20,20);
+tresL2=zeros(quantIm,size(resL1,1),dtx,dty);
+
+vmax=[];
 
 for l = 1: quantIm
 b=double(imread(strcat(nomedir,'/',arquivos(l+2).name)));
@@ -21,11 +26,12 @@ b=double(imread(strcat(nomedir,'/',arquivos(l+2).name)));
 imres = filtrocasado(A, b);
 
 %encontra região dos pontos máximos (próximos à 1)
-[x y] = find(max(max(imres)));  
+[x y] = find(imres==max(max(imres)));  
 
 %Corte através do tensor
-tresL2(l,:,:,:)=resL1(:,x:x+19,y:y+19);
+tresL2(l,:,:,:)=resL1(:,x-floor(dtx/2)+1:x+ceil(dtx/2),y-floor(dty/2)+1:y+ceil(dty/2));
 
+vmax=[vmax; x y];
 clear x y;
 
 waitbar(l/quantIm)
@@ -34,7 +40,8 @@ toc
 
 delete(h)
 
-
-save(strcat('./4/tensor/tL2'),'tresL2');
+tL2=tresL2;
+save('vmax');
+save(strcat('./4/tensor/tL21'),'tL2');
 end
 
