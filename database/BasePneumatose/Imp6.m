@@ -1,4 +1,5 @@
-%% Implementação 5 
+%% Implementação 6
+% Funções com cálculo de computação paralela.
 % Estrutura de banco de filtros agora organizado para os tensores
 
 clear;clc;close all;
@@ -10,17 +11,16 @@ nomex='5961.1';
 dirI=strcat('../Exames/',nomex,'.jpg');    %exame
 dirM=strcat('./Mascaras/',nomex,'.jpg');  %mascara
 [A,AM] = abririm(dirI,dirM);
-%[A] = abririm(dirI);
 
+%% Banco de Filtros 
 
-%% Rede de Filtros 
-
+limiar=0.8;
 %layer 1
-[resL1] = cbancfiltpmax(A,0.8);
+[ resL1, maximos ] = bancofiltcgpu(A,limiar );
 
 %% Extração de tensor para treinamento
-%[tresL2] = tcbancfiltpmax(A,resL1,nomex);
+[tL1_t] = extratensor(resL1,maximos,20);
+salvaresultado('0',tL1_t);
 
-parpool
-%layer 2 tira o strid desta função (adicionar na verdade)
-[resL2] =ctensorpmaxGpu(resL1,'tL2');
+%% Camada 2
+[resL2] = convtlayer(resL1,1);

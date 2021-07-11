@@ -1,6 +1,5 @@
-function [ ] = recorteKernels(A,Am,tk)
+function recorteKernels(A,Am,tk)
 %Recorte de kernels automático por meio de máscara.
-%   Detailed explanation goes here
 %   A= Imagem a ser recortada, 
 %   Am = Máscara da Imagem em preto e branco,
 %   tk= tamanho dos recortes
@@ -14,7 +13,7 @@ for i = 1: length(index)
    if(any(masc(index(i,1)-d:index(i,1)+d,index(i,2)-d:index(i,2)+d))==0)
    m=A(index(i,1)-d:index(i,1)+d,index(i,2)-d:index(i,2)+d);
    n=n+1;
-   imwrite(uint8(m),strcat('.\kernels\',sprintf('%d',n),'.jpg'));
+   imwrite(uint8(m),strcat('.\kernels\',int2char(n),'.jpg'));
    masc(index(i,1)-d:index(i,1)+d,index(i,2)-d:index(i,2)+d)=1;   
    end
 end

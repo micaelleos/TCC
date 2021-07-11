@@ -9,7 +9,7 @@ J=zeros(size(A,1)-ceil(dbx/2),size(A,2)-ceil(dby/2));
 %Normalização dos vetores
 b=b(:);
 b=b-mean(b);
-b=b./norm(b);
+b=b/norm(b);
 tic
 % nesta convolução há redução da imagem de saída - sem padding
 for i = 1:size(A,1)-ceil(dbx/2)
@@ -19,7 +19,7 @@ for i = 1:size(A,1)-ceil(dbx/2)
             M=M(:);
             M=M-mean(M);
             if (norm(M)~=0)
-            M=M./norm(M);
+            M=M/norm(M);
             end
              J(i,j)=M(:)'*b(:);
         end

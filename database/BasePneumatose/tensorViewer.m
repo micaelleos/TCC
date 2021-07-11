@@ -1,11 +1,27 @@
-clear;clc;close all;
-load('D:\Users\micae\Documents\Universidade\11° Período\TCC\Codigos\TCC\TCC\database\BasePneumatose\4\tensor\tL2.mat')
 
+% variável a ser visualizada
+tL=resL1;
+
+%% visualização de tensor de saída de camada
+soma=zeros(size(tL(1,:,:)));
+for j=1:size(tL,1)
+    soma=soma+abs(tL(j,:,:));
+end
+
+soma=squeeze(soma);
+
+soma=squeeze(soma);
+figure
+colormap('gray')
+image(soma,'CDataMapping','scaled')
+
+
+%% visualização de conjunto de tensores -> tensores de treinamento
 x=[];
 y=[];
 z=[];
-for i=1:size(tL2,1)
-tensor=squeeze(tL2(i,:,:,:));
+for i=1:size(tL,1)
+tensor=squeeze(tL(i,:,:,:));
 tensor2=zeros(size(tensor));
 tensor2(tensor(:,:,:)>0.5)=1;
 
@@ -17,24 +33,3 @@ plot3(z,x,y,'.');
 clear x y z
 end
 
-tL2=resL2;
-soma=zeros(size(tL2(1,:,:)));
-for j=1:size(tL2,1)
-    soma=soma+abs(tL2(j,:,:));
-end
-
-soma=resL2(10,:,:);%squeeze(soma);
-
-soma=squeeze(soma);
-figure
-colormap('gray')
-image(soma,'CDataMapping','scaled')
-
-
-tic
-any(any(a))
-toc
-
-if(any(any(a))~=0)
-    disp('oi')
-end

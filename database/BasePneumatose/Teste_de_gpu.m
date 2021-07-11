@@ -16,23 +16,35 @@ dirM=strcat('./Mascaras/',nomex,'.jpg');  %mascara
 [A,AM] = abririm(dirI,dirM);
 
 %% Testando função filtrocasado
-% tic
-% Agpu=gpuArray(A);
-% bgpu=gpuArray(b);
-% 
-% Jgpu=normxcorr2(bgpu,Agpu);
-% Jgather=gather(Jgpu);
-% toc
-% 
-% tic
-% J = filtrocasado( A, b );
-% toc
-% 
-% figure
-% image(J,'CDataMapping','scaled');
-% 
-% figure
-% image(Jgather,'CDataMapping','scaled');
+tic
+Agpu=gpuArray(A);
+bgpu=gpuArray(b);
+
+Jgpu=normxcorr2(bgpu,Agpu);
+Jgather=gather(Jgpu);
+toc
+
+tic
+J = filtrocasado( A, b );
+toc
+
+norm(norm(Jgather))
+norm(norm(J))
+
+mean(mean(Jgather))
+mean(mean(J))
+
+max(max(Jgather))
+max(max(J))
+
+min(min(Jgather))
+min(min(J))
+
+figure
+image(J,'CDataMapping','scaled');
+
+figure
+image(Jgather,'CDataMapping','scaled');
 
 %% Testando função bancofiltcgpu
 limiar=0.7;

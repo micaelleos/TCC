@@ -7,7 +7,8 @@ imres = [];
 dtx=40;
 dty=40;
 
-%pasta fixa filtros
+%pasta fixa filtros. Abre-se a pasta segundo o nome da imagem de
+%referência nomex
 nomedir=strcat('./Base_de_teste_2/',nomex,'/20x20');
 
 arquivos = dir(strcat('./',nomedir)); %diretório das bases
